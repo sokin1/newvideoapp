@@ -20,14 +20,14 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+                })
             }
         ]
     },
     plugins: [
-        new ExtractTextPlugin({
-            filename: 'bundle.css',
-            allChunks: true
-        })
+        new ExtractTextPlugin("styles.css"),
     ]
 }

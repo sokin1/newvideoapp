@@ -4,11 +4,11 @@ export default (render_params) => {
         <html>
             <head>
                 <title>${render_params.title}</title>
-                <link rel="stylesheet" type="text/css" href="public/bundle.css" />
+                <link rel="stylesheet" type="text/css" href="styles.css" />
             </head>
             <body>
                 <script>window.__initial_states__=${JSON.stringify(render_params.state)}</script>
-                <script src="/public/bundle.js"></script>
+                <script src="bundle.js"></script>
                 <div id="root">${render_params.body}</div>
             </body>
         </html>
