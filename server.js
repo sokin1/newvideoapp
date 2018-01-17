@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 var express = require('express')
+import path from 'path'
 
 import MainComponent from './src/components/MainComponent.js'
 
@@ -8,18 +9,20 @@ import template from './public/template'
 
 const app = express()
 
-app.use(express.static('public'))
+app.set('views', path.join(__dirname, 'public'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
-    const state = {
+    const initial_state = {
         uid: null,
         cur_page: 'START'
     }
-    const html = ReactDOMServer.renderToString(<MainComponent state={state} />)
+    const html = ReactDOMServer.renderToString(<MainComponent state={initial_state} />)
 
-    res.send(template({
+    res.end(template({
         body: html,
-        title: 'Welcome!'
+        title: 'Welcome!',
+        state: initial_state
     }))
 })
 
