@@ -1,8 +1,8 @@
 import React from 'react'
 
+import Main from './Main'
 import Header from './Header'
 import Footer from './Footer'
-import Body from './Body'
 
 export default class MainComponent extends React.Component {
     constructor(props) {
@@ -10,10 +10,11 @@ export default class MainComponent extends React.Component {
     }
 
     render() {
+        console.log(this.props.content)
         return(
             <div>
                 <Header />
-                <Body />
+                <Main />
                 <Footer />
             </div>
         )
