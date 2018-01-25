@@ -15,9 +15,10 @@ const clientDistPath = path.resolve(__dirname, '../dist')
 
 app.use('/static', express.static(clientDistPath))
 
-app.get('/*', (req, res) => {
+app.post('/signup', (req, res) => {
     const context = {}
-    const initData = {content: 'api'}
+
+    const initData = {loc: 'SIGNUP_P1', status: 'NA', uid: undefined}
 
     var html = ReactDOMServer.renderToString(
         <StaticRouter location={req.url} context={context}>
@@ -25,7 +26,53 @@ app.get('/*', (req, res) => {
          </StaticRouter>
     )
 
-    res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={initData} />))
+    res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+})
+
+app.get('/*', (req, res) => {
+    const context = {}
+
+    if(req.url ==='/') {
+        const initData = {loc: 'START', status: 'NA', uid: undefined}
+
+        var html = ReactDOMServer.renderToString(
+            <StaticRouter location={req.url} context={context}>
+                <MainComponent state={initData}/>
+             </StaticRouter>
+        )
+
+        res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+    } else if(req.url === '/signup') {
+        const initData = {loc: 'SIGNUP_P1', status: 'NA', uid: undefined}
+
+        var html = ReactDOMServer.renderToString(
+            <StaticRouter location={req.url} context={context}>
+                <MainComponent state={initData}/>
+             </StaticRouter>
+        )
+
+        res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+    } else if(req.url === '/main') {
+        const initData = {loc: 'LOGIN', status: 'LOG_IN', uid: 'some uid'}
+
+        var html = ReactDOMServer.renderToString(
+            <StaticRouter location={req.url} context={context}>
+                <MainComponent state={initData}/>
+             </StaticRouter>
+        )
+
+        res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+    } else {
+        const initData = {loc: 'UNKNOWN', status: 'NA', uid: undefined}
+
+        var html = ReactDOMServer.renderToString(
+            <StaticRouter location={req.url} context={context}>
+                <MainComponent state={initData}/>
+             </StaticRouter>
+        )
+
+        res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+    }
 })
 
 var PORT = 3000
