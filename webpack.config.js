@@ -6,7 +6,7 @@ var HtmlWebpackTemplate = require('html-webpack-template')
 
 module.exports = env => {
     return {
-        entry: './js/client.js',
+        entry: './client.js',
         output: {
             filename: 'bundle.js',
             path: resolve(__dirname, 'dist'),
@@ -24,18 +24,13 @@ module.exports = env => {
                         presets: ["@babel/preset-react", "@babel/preset-es2015"]
                     }
                 },
-                // {
-                //     test: /\.css$/,
-                //     loader: ExtractTextPlugin.extract({
-                //         fallback: 'style-loader',
-                //         use: 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-                //     })
-                // },
-                // {
-                //     test: /\.css$/,
-                //     exclude: /node_modules/,
-                //     loader: 'postcss-loader'
-                // }
+                {
+                    test: /\.css$/,
+                    loader: ExtractTextPlugin.extract({
+                        // fallback: 'style-loader',
+                        use: 'css-loader?modules&localIdentName=[name]_[local]__[hash:base64:5]'
+                    })
+                }
             ]
         },
         plugins: [
@@ -45,9 +40,9 @@ module.exports = env => {
                 appMountId: 'root',
                 mobile: true
             })
+        ],
+        plugins: [
+            new ExtractTextPlugin("styles.css"),
         ]
-        // plugins: [
-        //     new ExtractTextPlugin("styles.css"),
-        // ]
     }
 }

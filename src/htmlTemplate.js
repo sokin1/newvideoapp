@@ -5,6 +5,7 @@ export default function HtmlTemplate(props) {
         <html>
             <head>
                 <title>Video Chat</title>
+                <link rel="stylesheet" type="text/css" href="/static/styles.css" />
             </head>
             <body>
                 <div id="root" dangerouslySetInnerHTML={{__html: props.content}} />

@@ -7,6 +7,7 @@ import Footer from './Footer'
 export default class MainComponent extends React.Component {
     constructor(props) {
         super(props)
+        this.state = this.props.state
     }
 
     render() {

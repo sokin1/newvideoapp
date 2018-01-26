@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import styles from './Header.css'
+
 export default class Header extends React.Component {
     constructor(props) {
         super(props)
@@ -8,7 +10,7 @@ export default class Header extends React.Component {
 
     render() {
         return(
-            <header>
+            <header className={styles.header} >
                 <div id="logo_img">
                     <Link to='/'>image</Link>
                 </div>
@@ -20,10 +22,7 @@ export default class Header extends React.Component {
                         <label id="password">Password:</label>
                         <input type="password" id="password" name="password" />
 
-                        <label id="confirm_password">Confirm Password:</label>
-                        <input type="password" id="confirm_password" name="confirm_password" />
-
-                        <input type="submit" value="Sign Up" />
+                        <input type="submit" value="Log Up" />
                     </form>
                 </div>
             </header>

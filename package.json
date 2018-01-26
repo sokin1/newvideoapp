@@ -4,7 +4,10 @@
   "description": "",
   "main": "src/client.js",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "css-modules-require-hook": "^4.2.3",
     "express": "^4.16.2",
+    "extract-text-webpack-plugin": "^3.0.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
@@ -26,15 +29,13 @@
     "webpack-dev-server": "^2.11.1"
   },
   "scripts": {
-    "build:server": "babel src/js --out-dir dist-server",
-    "start:server": "node dist-server/server.js",
+    "build:server": "babel src --out-dir dist-server --copy-files",
+    "start:server": "node dist-server/bootstrapServer.js",
     "build:dev": "webpack --env.dev",
     "build:prod": "webpack -p --env.prod",
-    "start:dev": "webpack-dev-server --env.dev --inline --history-api-fallback"
+    "start:dev": "webpack-dev-server --env.dev --inline --history-api-fallback",
+    "go": "npm run build:dev && npm run build:server && npm run start:server"
   },
   "author": "Jaekuk Kim<sokin1@hotmail.com>",
-  "license": "ISC",
-  "publishConfig": {
-    "registry": "http://npm-registry.lion.altus.bblabs.rim.net:5984"
-  }
+  "license": "ISC"
 }
