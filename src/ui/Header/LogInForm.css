@@ -1,0 +1,6 @@
+.login_form {
+    float: right;
+    height: inherit;
+    width: fit-content;
+    padding: 10px;
+}
