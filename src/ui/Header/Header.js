@@ -1,7 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-
-import styles from './Header.css'
 
 import LogInForm from './LogInForm'
 import UserInfo from './UserInfo'
