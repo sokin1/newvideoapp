@@ -1,13 +1,13 @@
 import React from 'react'
 
-export default class Signup extends React.Component {
+export default class SignUp2 extends React.Component {
     constructor(props) {
         super(props)
     }
 
     render() {
         return(
-            <h1>Sign up</h1>
+            <h1>Signup_p2</h1>
         )
     }
 }

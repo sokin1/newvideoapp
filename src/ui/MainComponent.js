@@ -1,20 +1,24 @@
 import React from 'react'
 
-import Main from './Main'
-import Header from './Header'
-import Footer from './Footer'
+import Body from './Body/Body'
+import Header from './Header/Header'
+import Footer from './Footer/Footer'
+import { setTimeout } from 'timers';
 
 export default class MainComponent extends React.Component {
     constructor(props) {
         super(props)
-        this.state = this.props.state
+        this.state = {
+            status: this.props.state.status,
+            uid: this.props.state.uid
+        }
     }
 
     render() {
         return(
             <div>
-                <Header />
-                <Main />
+                <Header state={this.state} />
+                <Body state={this.state} />
                 <Footer />
             </div>
         )

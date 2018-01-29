@@ -1,9 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-import styles from './Header.css'
-
-export default class Header extends React.Component {
+export default class LogInForm extends React.Component {
     constructor(props) {
         super(props)
     }
@@ -15,14 +12,14 @@ export default class Header extends React.Component {
                     <Link to='/'>image</Link>
                 </div>
                 <div id="login">
-                    <form method='post' action='/signup'>
+                    <form method='post' action='/'>
                         <label id="email">Email:</label>
                         <input type="text" id="email" name="email" />
 
                         <label id="password">Password:</label>
                         <input type="password" id="password" name="password" />
 
-                        <input type="submit" value="Log Up" />
+                        <input type="submit" value="Log In" />
                     </form>
                 </div>
             </header>

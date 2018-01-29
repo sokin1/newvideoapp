@@ -1,13 +1,13 @@
 import React from 'react'
 
-export default class Home extends React.Component {
+export default class Setting extends React.Component {
     constructor(props) {
         super(props)
     }
 
     render() {
         return(
-            <h1>Home</h1>
+            <h1>Setting</h1>
         )
     }
 }

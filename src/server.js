@@ -4,6 +4,10 @@ import { match, RouterContext } from 'react-router'
 import { StaticRouter } from 'react-router-dom'
 import cookieParser from 'cookie-parser'
 
+import net from 'net'
+import md5 from 'md5'
+import Crypto from './Crypto'
+
 var express = require('express')
 import path from 'path'
 import HtmlTemplate from './htmlTemplate'
@@ -17,73 +21,80 @@ app.use('/static', express.static(clientDistPath))
 
 app.use(cookieParser())
 
-// app.use((req, res, next) => {
-    // var cookie = req.cookies.cookieName
-    // if(cookie === undefined) {
-    //     var randomNumber = Math.random().toString()
-    //     randomNumber = randomNumber.substring(2, randomNumber.length)
-    //     res.cookie('cookieName', randomNumber, {maxAge: 900000, httpOnly: true})
-    // } else {
-    //     console.log('cookie exists', cookie)
-    // }
-
-    // next()
-// })
-
-app.post('/signup', (req, res) => {
+function renderPage(req, res, initData) {
     const context = {}
-
-    const initData = {loc: 'SIGNUP_P1', status: 'NA', uid: undefined}
 
     var html = ReactDOMServer.renderToString(
         <StaticRouter location={req.url} context={context}>
             <MainComponent state={initData}/>
-         </StaticRouter>
+        </StaticRouter>
     )
 
     res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+}
+
+// Two cases,
+//  1. After signup_p2
+//  2. Login from start page
+app.post('/', (req, res) => {
+    res.cookie('uname', req.cookies.uname, {expires: new Date(Date.now() + 900000), httpOnly: true})
+    res.cookie('uid', req.cookies.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})
+    res.cookie('status', 'loggedin', {expires: new Date(Date.now() + 90000), httpOnly: true})
+
+    const initData ={loc: 'MAIN', status: 'LOGGEDIN', uid: req.cookies.uid}
+    renderPage(req, res, initData)
+})
+
+app.post('/signup', (req, res) => {
+    var client = new net.Socket()
+    client.connect(1337, '127.0.0.1', () => {
+        const jsonData = {
+            action: 'SIGN_UP_P1',
+            username: md5(req.body.email),
+            password: md5(Crypto.encoder(req.body.password))
+        }
+
+        client.write(JSON.stringify(jsonData))
+    })
+
+    client.on('data', data => {
+        var result = JSON.parse(data)
+        if(result.Result) {
+            const initData = {loc: 'SIGNUP_P1', status: 'Notification Sent', uid: result.uid}
+            res.cookie('uname', result.email, {expires: new Date(Date.now() + 900000), httpOnly: true})
+            res.cookie('uid', result.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})
+            res.cookie('status', 'signup_p2', {expires: new Date(Date.now() + 90000), httpOnly: true})
+            renderPage(req, res, initData)
+        } else {
+            const initData = {loc: 'SIGNUP_P1', status: 'Sign Up Failed', uid: undefined}
+            renderPage(req, res, initData)
+        }
+    })
+})
+
+app.get('/signup_p2', (req, res) => {
+
 })
 
 app.get('/', (req, res) => {
-    const context = {}
+    var cur_uid = req.cookies.uid
 
-    const initData = {loc: 'START', status: 'NA', uid: undefined}
+    if(cur_uid === undefined) {
+        const initData = {loc: 'START', status: 'NA', uid: cur_uid}
+        renderPage(req, res, initData)
+    } else {
+        res.cookie('uname', req.cookies.uname, {expires: new Date(Date.now() + 900000), httpOnly: true})
+        res.cookie('uid', req.cookies.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})
+        res.cookie('status', 'loggedin', {expires: new Date(Date.now() + 90000), httpOnly: true})
 
-    var html = ReactDOMServer.renderToString(
-        <StaticRouter location={req.url} context={context}>
-            <MainComponent state={initData}/>
-            </StaticRouter>
-    )
-    
-    res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+        const initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
+        renderPage(req, res, initData)
+    }
 })
 
 app.get('/signup', (req, res) => {
-    const context = {}
-
     const initData = {loc: 'SIGNUP_P1', status: 'NA', uid: undefined}
-
-    var html = ReactDOMServer.renderToString(
-        <StaticRouter location={req.url} context={context}>
-            <MainComponent state={initData}/>
-         </StaticRouter>
-    )
-
-    res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
-})
-
-app.get('/main', (req, res) => {
-    const context = {}
-        
-    const initData = {loc: 'LOGIN', status: 'LOG_IN', uid: 'some uid'}
-
-    var html = ReactDOMServer.renderToString(
-        <StaticRouter location={req.url} context={context}>
-            <MainComponent state={initData}/>
-         </StaticRouter>
-    )
-
-    res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+    renderPage(req, res, initData)
 })
 
 var PORT = 3000
