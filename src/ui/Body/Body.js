@@ -7,6 +7,8 @@ import SignUp2 from './SignUp2'
 import Setting from './Setting'
 import Group from './Group'
 
+import styles from './Body.css'
+
 export default class Body extends React.Component {
     constructor(props) {
         super(props)
@@ -18,7 +20,7 @@ export default class Body extends React.Component {
 
     render() {
         return(
-            <main>
+            <main className={styles.body}>
                 <Switch>
                     <Route exact
                         path='/'
