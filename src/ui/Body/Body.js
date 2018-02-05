@@ -29,18 +29,6 @@ export default class Body extends React.Component {
                         )}
                     />
                     <Route
-                        path='/signup'
-                        render={routeProps => (
-                           <SignUp {...routeProps} {...this.state} />
-                        )}
-                    />
-                    <Route
-                        path='/signup_p2'
-                        render={routeProps => (
-                            <SignUp2 {...routeProps} {...this.state} />
-                        )}
-                    />
-                    <Route
                         path='/setting'
                         render={routeProps => (
                             <Setting {...routeProps} {...this.state} />

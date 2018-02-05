@@ -33,14 +33,15 @@ module.exports = env => {
                 }
             ]
         },
-        plugins: [
-            new HtmlWebpackPlugin({
-                inject: false,
-                template: HtmlWebpackTemplate,
-                appMountId: 'root',
-                mobile: true
-            })
-        ],
+        // plugins: [
+        //     new HtmlWebpackPlugin({
+        //         inject: false,
+        //         template: HtmlWebpackTemplate,
+        //         bodyHtmlSnippet: '',
+        //         appMountId: 'root',
+        //         mobile: true
+        //     })
+        // ],
         plugins: [
             new ExtractTextPlugin("styles.css"),
         ]

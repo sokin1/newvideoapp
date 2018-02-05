@@ -1,17 +1,10 @@
 import React from 'react'
 
-import classNames from 'classnames'
+import styles from './SignUpForm.css'
 
-import styles from './LogInForm.css'
-
-export default class LogInForm extends React.Component {
+export default class SignUpForm extends React.Component {
     constructor(props) {
         super(props)
-    }
-
-    openLoginModal(e) {
-        e.preventDefault()
-        document.getElementById('id01').style.display='block'
     }
 
     openSignupModal(e) {
@@ -19,7 +12,7 @@ export default class LogInForm extends React.Component {
         document.getElementById('id01').style.display='block'
     }
 
-    closeLoginModal(e) {
+    closeSignupModal(e) {
         e.preventDefault()
         document.getElementById('id01').style.display='none'
     }
@@ -27,9 +20,9 @@ export default class LogInForm extends React.Component {
     render() {
         return(
             <div>
-                <button onClick={this.openLoginModal.bind(this)}>Login</button>
+                <button onClick={this.openSignupModal.bind(this)}>Signup</button>
                 <div id='id01' className={styles.modal}>
-                    <span onClick={this.closeLoginModal.bind(this)} className={styles.close} title='Close Modal'>x</span>
+                    <span onClick={this.closeSignupModal.bind(this)} className={styles.close} title='Close Modal'>x</span>
 
                     <form className={styles.modalContent} action='/'>
                         <div className={styles.imgcontainer}>
@@ -42,15 +35,17 @@ export default class LogInForm extends React.Component {
                             <label><b>Password</b></label>
                             <input type='password' placeholder='Enter Password' name='psw' required />
 
-                            <button type='submit'>Login</button>
+                            <label><b>Confirm Password</b></label>
+                            <input type='password' placeholder='Re Enter Password' name='psw_re' required />
+
+                            <button type='submit'>Signup</button>
                             <label>
                                 <input type='checkbox' defaultChecked />Remember me
                             </label>
                         </div>
 
                         <div className={styles.container} style={{backgroundColor: '#f1f1f1'}}>
-                            <button type='button' onClick={this.closeLoginModal.bind(this)} className={styles.cancelbtn}>Cancel</button>
-                            <span className={styles.psw}>Forgot <a href='#'>password?</a></span>
+                            <button type='button' onClick={this.closeSignupModal.bind(this)} className={styles.cancelbtn}>Cancel</button>
                         </div>
                     </form>
                 </div>

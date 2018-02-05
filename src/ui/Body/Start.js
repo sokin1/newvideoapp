@@ -1,7 +1,7 @@
 import React from 'react'
 
-import SignUpForm from './SignUpForm'
-import AppMain from './AppMain'
+import TitlePage from './TitlePage'
+import MainPage from './MainPage'
 
 export default class Start extends React.Component {
     constructor(props) {
@@ -15,11 +15,11 @@ export default class Start extends React.Component {
     render() {
         if(this.state.uid === undefined) {
             return(
-                <SignUpForm />
+                <TitlePage />
             )
         } else {
             return(
-                <AppMain />
+                <MainPage />
             )
         }
     }

@@ -30,12 +30,16 @@ function renderPage(req, res, initData) {
         </StaticRouter>
     )
 
-    res.send(ReactDOMServer.renderToString(<HtmlTemplate content={html} state={JSON.stringify(initData)} />))
+    var rendered_page = HtmlTemplate({
+        content: html,
+        state: initData
+    })
+
+    console.log(rendered_page)
+
+    res.end(rendered_page)
 }
 
-// Two cases,
-//  1. After signup_p2
-//  2. Login from start page
 app.post('/', (req, res) => {
     res.cookie('uname', req.cookies.uname, {expires: new Date(Date.now() + 900000), httpOnly: true})
     res.cookie('uid', req.cookies.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})

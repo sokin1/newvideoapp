@@ -44,9 +44,15 @@ button:hover {
 }
 
 span.psw {
-    float:right;
+    float: right;
     padding-top: 16px;
 }
+
+span.psw_re {
+    float: right;
+    padding-top: 16px;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */

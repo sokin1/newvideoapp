@@ -1,6 +1,7 @@
 import React from 'react'
 
 import LogInForm from './LogInForm'
+import SignUpForm from './SignUpForm'
 import UserInfo from './UserInfo'
 import Logo from './Logo'
 
@@ -21,6 +22,7 @@ export default class Header extends React.Component {
                 <header className={styles.header} >
                     <Logo />
                     <LogInForm />
+                    <SignUpForm />
                 </header>
             )
         } else {
