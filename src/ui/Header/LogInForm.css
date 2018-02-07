@@ -17,6 +17,11 @@ button {
     cursor: pointer;
 }
 
+.loginBtn {
+    float: right;
+    margin: 5px;
+}
+
 button:hover {
     opacity: 0.8;
 }
