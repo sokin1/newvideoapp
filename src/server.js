@@ -35,27 +35,41 @@ function renderPage(req, res, initData) {
         state: initData
     })
 
-    console.log(rendered_page)
-
     res.end(rendered_page)
 }
 
 app.post('/', (req, res) => {
-    res.cookie('uname', req.cookies.uname, {expires: new Date(Date.now() + 900000), httpOnly: true})
-    res.cookie('uid', req.cookies.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})
-    res.cookie('status', 'loggedin', {expires: new Date(Date.now() + 90000), httpOnly: true})
+    var client = new net.Socket()
+    client.connect(1337, '127.0.0.1', () => {
+        const jsonData = {
+            action: 'LOG_IN',
+            email: Crypto.encoder(req.body.email),
+            password: md5(Crypto.encoder(req.body.psw))
+        }
+    })
 
-    const initData ={loc: 'MAIN', status: 'LOGGEDIN', uid: req.cookies.uid}
-    renderPage(req, res, initData)
+    client.on('data', data => {
+        var result = JSON.parse(data)
+        var initData
+
+        if(result.Result) {
+            initData = {loc: 'LOGIN', status: 'Logged In', uid: result.uid}
+        } else {
+            initData = {loc: 'START', status: 'LogIn Failed', reason: result.reason}
+        }
+
+        renderPage(req, res, initData)
+    })
 })
 
 app.post('/signup', (req, res) => {
     var client = new net.Socket()
     client.connect(1337, '127.0.0.1', () => {
         const jsonData = {
-            action: 'SIGN_UP_P1',
-            username: md5(req.body.email),
-            password: md5(Crypto.encoder(req.body.password))
+            action: 'SIGN_UP',
+            email: Crypto.encoder(req.body.email),
+            password: md5(Crypto.encoder(req.body.psw)),
+            confirm_password: md5(Crypto.encoder(req.body.psw_re))
         }
 
         client.write(JSON.stringify(jsonData))
@@ -63,41 +77,28 @@ app.post('/signup', (req, res) => {
 
     client.on('data', data => {
         var result = JSON.parse(data)
+        var initData
+
         if(result.Result) {
-            const initData = {loc: 'SIGNUP_P1', status: 'Notification Sent', uid: result.uid}
-            res.cookie('uname', result.email, {expires: new Date(Date.now() + 900000), httpOnly: true})
-            res.cookie('uid', result.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})
-            res.cookie('status', 'signup_p2', {expires: new Date(Date.now() + 90000), httpOnly: true})
-            renderPage(req, res, initData)
+            initData = {loc: 'SIGNUP', status: 'Notification Sent', uid: result.uid}
         } else {
-            const initData = {loc: 'SIGNUP_P1', status: 'Sign Up Failed', uid: undefined}
-            renderPage(req, res, initData)
+            initData = {loc: 'SIGNUP', status: 'Sign Up Failed', reason: result.fail_reason}
         }
+
+        renderPage(req, res, initData)
     })
-})
-
-app.get('/signup_p2', (req, res) => {
-
 })
 
 app.get('/', (req, res) => {
     var cur_uid = req.cookies.uid
+    var initData
 
     if(cur_uid === undefined) {
-        const initData = {loc: 'START', status: 'NA', uid: cur_uid}
-        renderPage(req, res, initData)
+        initData = {loc: 'START', status: 'NA', uid: cur_uid}
     } else {
-        res.cookie('uname', req.cookies.uname, {expires: new Date(Date.now() + 900000), httpOnly: true})
-        res.cookie('uid', req.cookies.uid, {expires: new Date(Date.now() + 90000), httpOnly: true})
-        res.cookie('status', 'loggedin', {expires: new Date(Date.now() + 90000), httpOnly: true})
-
-        const initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
-        renderPage(req, res, initData)
+        initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
     }
-})
 
-app.get('/signup', (req, res) => {
-    const initData = {loc: 'SIGNUP_P1', status: 'NA', uid: undefined}
     renderPage(req, res, initData)
 })
 

@@ -3,7 +3,6 @@ import React from 'react'
 import Body from './Body/Body'
 import Header from './Header/Header'
 import Footer from './Footer/Footer'
-import { setTimeout } from 'timers';
 
 export default class MainComponent extends React.Component {
     constructor(props) {
