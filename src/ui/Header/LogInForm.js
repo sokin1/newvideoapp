@@ -1,7 +1,5 @@
 import React from 'react'
 
-import classNames from 'classnames'
-
 import styles from './LogInForm.css'
 
 export default class LogInForm extends React.Component {
@@ -10,11 +8,6 @@ export default class LogInForm extends React.Component {
     }
 
     openLoginModal(e) {
-        e.preventDefault()
-        document.getElementById('id01').style.display='block'
-    }
-
-    openSignupModal(e) {
         e.preventDefault()
         document.getElementById('id01').style.display='block'
     }
@@ -29,9 +22,9 @@ export default class LogInForm extends React.Component {
             <div>
                 <button onClick={this.openLoginModal.bind(this)}>Login</button>
                 <div id='id01' className={styles.modal}>
-                    <span onClick={this.closeLoginModal.bind(this)} className={styles.close} title='Close Modal'>x</span>
-
                     <form className={styles.modalContent} action='/'>
+                        <span onClick={this.closeLoginModal.bind(this)} className={styles.close} title='Close Modal'>X</span>
+
                         <div className={styles.imgcontainer}>
                         </div>
 

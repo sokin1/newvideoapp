@@ -22,9 +22,9 @@ export default class SignUpForm extends React.Component {
             <div>
                 <button onClick={this.openSignupModal.bind(this)}>Signup</button>
                 <div id='id01' className={styles.modal}>
-                    <span onClick={this.closeSignupModal.bind(this)} className={styles.close} title='Close Modal'>x</span>
-
                     <form className={styles.modalContent} action='/'>
+                        <span onClick={this.closeSignupModal.bind(this)} className={styles.close} title='Close Modal'>X</span>
+
                         <div className={styles.imgcontainer}>
                         </div>
 
