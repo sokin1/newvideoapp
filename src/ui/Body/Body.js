@@ -40,6 +40,12 @@ export default class Body extends React.Component {
                             <Group {...routeProps} {...this.state} />
                         )}
                     />
+                    <Route
+                        path='/signup'
+                        render={routeProps => (
+                            <SignUp {...routeProps} {...this.state} />
+                        )}
+                    />
                 </Switch>
             </main>
         )

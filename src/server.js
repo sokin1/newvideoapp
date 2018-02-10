@@ -53,9 +53,9 @@ app.post('/', (req, res) => {
         var initData
 
         if(result.Result) {
-            initData = {loc: 'LOGIN', status: 'Logged In', uid: result.uid}
+            initData = {loc: 'LOGIN', status: 'SUCCESS', uid: result.uid, detail: 'Logged In'}
         } else {
-            initData = {loc: 'START', status: 'LogIn Failed', reason: result.reason}
+            initData = {loc: 'START', status: 'ERROR', reason: result.reason}
         }
 
         renderPage(req, res, initData)
@@ -80,9 +80,9 @@ app.post('/signup', (req, res) => {
         var initData
 
         if(result.Result) {
-            initData = {loc: 'SIGNUP', status: 'Notification Sent', uid: result.uid}
+            initData = {loc: 'SIGNUP', status: 'SUCCESS', detail: 'Notification has been sent'}
         } else {
-            initData = {loc: 'SIGNUP', status: 'Sign Up Failed', reason: result.fail_reason}
+            initData = {loc: 'SIGNUP', status: 'ERROR', reason: result.fail_reason}
         }
 
         renderPage(req, res, initData)
