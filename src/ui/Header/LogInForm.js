@@ -9,19 +9,19 @@ export default class LogInForm extends React.Component {
 
     openLoginModal(e) {
         e.preventDefault()
-        document.getElementById('modal').style.display='block'
+        document.getElementById('login_modal').style.display='block'
     }
 
     closeLoginModal(e) {
         e.preventDefault()
-        document.getElementById('modal').style.display='none'
+        document.getElementById('login_modal').style.display='none'
     }
 
     render() {
         return(
             <div>
                 <button onClick={this.openLoginModal.bind(this)} className={styles.loginBtn}>Login</button>
-                <div id='modal' className={styles.modal}>
+                <div id='login_modal' className={styles.login_modal}>
                     <form className={styles.modalContent} method='post' action='/'>
                         <span onClick={this.closeLoginModal.bind(this)} className={styles.close} title='Close Modal'>x</span>
                         <div className={styles.imgcontainer}>

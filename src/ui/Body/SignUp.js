@@ -2,11 +2,14 @@ import React from 'react'
 
 export default class SignUp extends React.Component {
     constructor(props) {
+        console.log(props)
         super(props)
         this.state = {
-            status: this.props.state.status,
-            uid: this.props.state.uid,
-            reason: this.props.state.reason
+            loc: this.props.loc,
+            status: this.props.status,
+            uid: this.props.uid,
+            detail: this.props.detail,
+            reason: this.props.reason
         }
     }
 
@@ -20,7 +23,7 @@ export default class SignUp extends React.Component {
             )
         } else {
             return(
-                <h1>Notification has been sent.</h1>
+                <h1>{this.state.detail}</h1>
             )
         }
     }

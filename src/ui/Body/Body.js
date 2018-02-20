@@ -25,25 +25,25 @@ export default class Body extends React.Component {
                     <Route exact
                         path='/'
                         render={routeProps => (
-                            <Start {...routeProps} {...this.state} />
+                            <Start {...routeProps} {...this.props.state} />
                         )}
                     />
                     <Route
                         path='/setting'
                         render={routeProps => (
-                            <Setting {...routeProps} {...this.state} />
+                            <Setting {...routeProps} {...this.props.state} />
                         )}
                     />
                     <Route
                         path='/group'
                         render={routeProps => (
-                            <Group {...routeProps} {...this.state} />
+                            <Group {...routeProps} {...this.props.state} />
                         )}
                     />
                     <Route
                         path='/signup'
                         render={routeProps => (
-                            <SignUp {...routeProps} {...this.state} />
+                            <SignUp {...routeProps} {...this.props.state} />
                         )}
                     />
                 </Switch>

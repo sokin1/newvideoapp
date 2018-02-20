@@ -5,8 +5,8 @@
   "main": "src/client.js",
   "dependencies": {
     "atob": "^2.0.3",
+    "body-parser": "^1.18.2",
     "btoa": "^1.1.2",
-    "classnames": "^2.2.5",
     "cookie-parser": "^1.4.3",
     "css-modules-require-hook": "^4.2.3",
     "express": "^4.16.2",
