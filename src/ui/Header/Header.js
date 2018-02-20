@@ -13,10 +13,7 @@ export default class Header extends React.Component {
         super(props)
         this.state = {
             loc: this.props.state.loc,
-            status: this.props.state.status,
-            uid: this.props.state.uid,
-            detail: this.props.state.detail,
-            reason: this.props.state.reason
+            userInfo: this.props.state.userInfo,
         }
     }
 
@@ -29,7 +26,7 @@ export default class Header extends React.Component {
             )
         }
 
-        if(this.state.uid === undefined) {
+        if(this.state.userInfo === undefined) {
             return(
                 <header className={styles.header} >
                     <Logo />
@@ -41,7 +38,7 @@ export default class Header extends React.Component {
             return(
                 <header className={styles.header}>
                     <Logo />
-                    <UserInfo />
+                    <UserInfo userInfo={this.state.userInfo}/>
                 </header>
             )
         }

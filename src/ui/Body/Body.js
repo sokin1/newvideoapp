@@ -13,8 +13,8 @@ export default class Body extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: this.props.state.status,
-            uid: this.props.state.uid
+            loc: this.props.state.loc,
+            userInfo: this.props.state.userInfo
         }
     }
 

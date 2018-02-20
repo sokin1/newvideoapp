@@ -3,23 +3,25 @@ import React from 'react'
 import TitlePage from './TitlePage'
 import MainPage from './MainPage'
 
+import firebase from 'firebase'
+
 export default class Start extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: this.props.status,
-            uid: this.props.uid
+            loc: this.props.loc,
+            userInfo: this.props.userInfo
         }
     }
 
     render() {
-        if(this.state.uid === undefined) {
+        if(this.state.userInfo === undefined) {
             return(
                 <TitlePage />
             )
         } else {
             return(
-                <MainPage />
+                <MainPage userInfo={this.state.userInfo} />
             )
         }
     }
