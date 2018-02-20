@@ -9,19 +9,19 @@ export default class SignUpForm extends React.Component {
 
     openSignupModal(e) {
         e.preventDefault()
-        document.getElementById('modal').style.display='block'
+        document.getElementById('signup_modal').style.display='block'
     }
 
     closeSignupModal(e) {
         e.preventDefault()
-        document.getElementById('modal').style.display='none'
+        document.getElementById('signup_modal').style.display='none'
     }
 
     render() {
         return(
             <div>
                 <button onClick={this.openSignupModal.bind(this)} className={styles.signupBtn}>Signup</button>
-                <div id='modal' className={styles.modal}>
+                <div id='signup_modal' className={styles.signup_modal}>
                     <form className={styles.modalContent} method='post' action='/signup'>
                         <span onClick={this.closeSignupModal.bind(this)} className={styles.close} title='Close Modal'>x</span>
                         <div className={styles.imgcontainer}>

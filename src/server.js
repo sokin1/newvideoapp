@@ -3,6 +3,7 @@ import ReactDOMServer from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
 import { StaticRouter } from 'react-router-dom'
 import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
 
 import net from 'net'
 import md5 from 'md5'
@@ -19,6 +20,10 @@ const app = express()
 const clientDistPath = path.resolve(__dirname, '../dist')
 app.use('/static', express.static(clientDistPath))
 
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
 app.use(cookieParser())
 
 function renderPage(req, res, initData) {
@@ -39,13 +44,16 @@ function renderPage(req, res, initData) {
 }
 
 app.post('/', (req, res) => {
+    console.log('logging in')
     var client = new net.Socket()
     client.connect(1337, '127.0.0.1', () => {
         const jsonData = {
             action: 'LOG_IN',
-            email: Crypto.encoder(req.body.email),
+            email: req.body.uname,
             password: md5(Crypto.encoder(req.body.psw))
         }
+
+        client.write(JSON.stringify(jsonData))
     })
 
     client.on('data', data => {
@@ -67,7 +75,7 @@ app.post('/signup', (req, res) => {
     client.connect(1337, '127.0.0.1', () => {
         const jsonData = {
             action: 'SIGN_UP',
-            email: Crypto.encoder(req.body.email),
+            email: req.body.uname,
             password: md5(Crypto.encoder(req.body.psw)),
             confirm_password: md5(Crypto.encoder(req.body.psw_re))
         }
