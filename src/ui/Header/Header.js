@@ -12,8 +12,8 @@ export default class Header extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            loc: this.props.state.loc,
-            userInfo: this.props.state.userInfo,
+            loc: this.props.loc,
+            userInfo: this.props.userInfo,
         }
     }
 
