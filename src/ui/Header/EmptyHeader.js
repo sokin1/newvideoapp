@@ -7,7 +7,7 @@ export default class EmptyHeader extends React.Component {
 
     render() {
         return(
-            <h1>No content</h1>
+            <h1>Empty Header</h1>
         )
     }
 }

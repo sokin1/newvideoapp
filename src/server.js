@@ -62,7 +62,7 @@ app.post('/', (req, res) => {
         var initData
 
         if(result.Result) {
-            initData = {loc: 'LOGIN', fb_config: result.fb_config, email: result.email}
+            initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, email: result.Detail.email}
         } else {
             initData = {loc: 'START', status: 'ERROR', reason: result.reason}
         }

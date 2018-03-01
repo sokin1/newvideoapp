@@ -2,14 +2,11 @@ import React from 'react'
 
 export default class SignUp extends React.Component {
     constructor(props) {
-        console.log(props)
         super(props)
         this.state = {
             loc: this.props.loc,
             status: this.props.status,
-            uid: this.props.uid,
-            detail: this.props.detail,
-            reason: this.props.reason
+            detail: this.props.detail
         }
     }
 

@@ -15,13 +15,17 @@ export default class Start extends React.Component {
     }
 
     render() {
-        if(this.state.userInfo === undefined) {
+        if(this.state.loc === 'START') {
             return(
                 <TitlePage />
             )
-        } else {
+        } else if(this.state.loc === 'LOGIN') {
             return(
                 <MainPage userInfo={this.state.userInfo} />
+            )
+        } else {
+            return(
+                <TitlePage />
             )
         }
     }

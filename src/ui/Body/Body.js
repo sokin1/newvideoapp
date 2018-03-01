@@ -14,18 +14,21 @@ export default class Body extends React.Component {
         super(props)
         this.state = {
             loc: this.props.loc,
-            userInfo: this.props.userInfo
+            status: this.props.status,
+            userInfo: this.props.userInfo,
+            detail: this.props.detail
         }
     }
 
     render() {
+        console.log('userInfo', this.state.userInfo)
         return(
             <main className={styles.body}>
                 <Switch>
                     <Route exact
                         path='/'
                         render={routeProps => (
-                            <Start {...routeProps} {...this.props.state} />
+                            <Start {...routeProps} loc={this.state.loc} userInfo={this.state.userInfo} />
                         )}
                     />
                     <Route
@@ -43,7 +46,7 @@ export default class Body extends React.Component {
                     <Route
                         path='/signup'
                         render={routeProps => (
-                            <SignUp {...routeProps} {...this.props.state} />
+                            <SignUp {...routeProps} loc={this.state.loc} status={this.state.status} detail={this.state.detail}/>
                         )}
                     />
                 </Switch>
