@@ -8,20 +8,16 @@ import firebase from 'firebase'
 export default class Start extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            loc: this.props.loc,
-            userInfo: this.props.userInfo
-        }
     }
 
     render() {
-        if(this.state.loc === 'START') {
+        if(this.props.loc === 'START') {
             return(
                 <TitlePage />
             )
-        } else if(this.state.loc === 'LOGIN') {
+        } else if(this.props.loc === 'LOGIN') {
             return(
-                <MainPage userInfo={this.state.userInfo} />
+                <MainPage userInfo={this.props.userInfo} groupInfo={this.props.groupInfo} />
             )
         } else {
             return(

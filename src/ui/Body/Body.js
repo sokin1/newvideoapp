@@ -12,23 +12,16 @@ import styles from './Body.css'
 export default class Body extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            loc: this.props.loc,
-            status: this.props.status,
-            userInfo: this.props.userInfo,
-            detail: this.props.detail
-        }
     }
 
     render() {
-        console.log('userInfo', this.state.userInfo)
         return(
             <main className={styles.body}>
                 <Switch>
                     <Route exact
                         path='/'
                         render={routeProps => (
-                            <Start {...routeProps} loc={this.state.loc} userInfo={this.state.userInfo} />
+                            <Start {...routeProps} loc={this.props.loc} userInfo={this.props.userInfo} groupInfo={this.props.groupInfo} />
                         )}
                     />
                     <Route
@@ -46,7 +39,7 @@ export default class Body extends React.Component {
                     <Route
                         path='/signup'
                         render={routeProps => (
-                            <SignUp {...routeProps} loc={this.state.loc} status={this.state.status} detail={this.state.detail}/>
+                            <SignUp {...routeProps} loc={this.props.loc} status={this.props.status} detail={this.props.detail}/>
                         )}
                     />
                 </Switch>

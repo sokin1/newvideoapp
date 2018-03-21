@@ -24,21 +24,19 @@ export default class Header extends React.Component {
                     <EmptyHeader />
                 </header>
             )
-        }
-
-        if(this.state.userInfo === undefined) {
+        } else if(this.state.loc === 'LOGIN') {
+            return(
+                <header className={styles.header}>
+                    <Logo />
+                    <UserInfo userInfo={this.props.userInfo}/>
+                </header>
+            )
+        } else {
             return(
                 <header className={styles.header} >
                     <Logo />
                     <LogInForm />
                     <SignUpForm />
-                </header>
-            )
-        } else {
-            return(
-                <header className={styles.header}>
-                    <Logo />
-                    <UserInfo userInfo={this.state.userInfo}/>
                 </header>
             )
         }

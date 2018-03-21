@@ -45,7 +45,6 @@ function renderPage(req, res, initData) {
 }
 
 app.post('/', (req, res) => {
-    console.log('logging in')
     var client = new net.Socket()
     client.connect(1337, '127.0.0.1', () => {
         const jsonData = {
@@ -99,6 +98,7 @@ app.post('/signup', (req, res) => {
 })
 
 app.get('/', (req, res) => {
+    console.log('Cookies: ', req.cookies)
     var cur_uid = req.cookies.uid
     var initData
 

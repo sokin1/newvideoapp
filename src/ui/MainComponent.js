@@ -16,19 +16,31 @@ export default class MainComponent extends React.Component {
             detail: this.props.state.detail,
             fb_config: this.props.state.fb_config,
             email: this.props.state.email,
-            userInfo: undefined
+            userInfo: "Not Defined"
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if(this.state.fb_config && this.state.email) {
             firebase.initializeApp(this.state.fb_config)
 
-            firebase.database().ref('users/' + md5(this.state.email)).on('value', (snapshot) => {
-                this.setState({
-                    userInfo: snapshot.val()
+            setTimeout(() => {
+                firebase.database().ref('users/' + md5(this.state.email)).on('value', userSnapshot => {
+                    if(userSnapshot.val().lastGroup !== '') {
+                        firebase.database().ref('groups/' + userSnapshot.val().lastGroup).on('value', groupSnapshot => {
+                            this.setState({
+                                userInfo: userSnapshot.val(),
+                                groupInfo: groupSnapshot.val()
+                            })
+                        })
+                    } else{
+                        this.setState({
+                            userInfo: userSnapshot.val(),
+                            groupInfo: "No Groups"
+                        })
+                    }
                 })
-            })
+            }, 1000)
         }
     }
 
@@ -36,7 +48,7 @@ export default class MainComponent extends React.Component {
         return(
             <div>
                 <Header loc={this.state.loc} userInfo={this.state.userInfo}/>
-                <Body loc={this.state.loc} userInfo={this.state.userInfo} status={this.state.status} detail={this.state.detail} />
+                <Body loc={this.state.loc} userInfo={this.state.userInfo} groupInfo={this.state.groupInfo} status={this.state.status} detail={this.state.detail} />
                 <Footer />
             </div>
         )
