@@ -44,6 +44,10 @@ function renderPage(req, res, initData) {
     res.end(rendered_page)
 }
 
+function getAccountInfo(info) {
+    
+}
+
 app.post('/', (req, res) => {
     var client = new net.Socket()
     client.connect(1337, '127.0.0.1', () => {
@@ -98,17 +102,43 @@ app.post('/signup', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    console.log('Cookies: ', req.cookies)
-    var cur_uid = req.cookies.uid
-    var initData
+    var cookie = req.signedCookies['login_info']
+    var decrypted_cookie = JSON.parse(Crypto.decrypt(cookie))
 
-    if(cur_uid === undefined) {
-        initData = {loc: 'START', status: 'NA', uid: cur_uid}
+    if(decrypted_cookie.cookie_expiry - new Date().now < 0) {
+        if(decrypted_cookie.emailPassword !== 'undefined') {
+            var accountInfo = getAccountInfo(decrypted_cookie.emailPassword)
+            var client = new net.Socket()
+            client.connect(1337, '127.0.0.1', () => {
+                const jsonData = {
+                    action: 'LOG_IN',
+                    email: accountInfo.email,
+                    password: accountInfo.password
+                }
+
+                client.write(JSON.stringify(jsonData))
+            })
+
+            client.on('data', data => {
+                var result = JSON.parse(data)
+                var initData
+
+                if(result.Result) {
+                    initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, email: result.Detail.email}
+                } else {
+                    initData = {loc: 'START', status: 'ERROR', reason: result.reason}
+                }
+
+                renderPage(req, res, initData)
+            })
+        } else {
+            var initData = {loc: 'START', status: 'NA', uid: cur_uid}
+            renderPage(req, res, initData)
+        }
     } else {
-        initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
+        var initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
+        renderPage(req, res, initData)
     }
-
-    renderPage(req, res, initData)
 })
 
 var PORT = 3000
