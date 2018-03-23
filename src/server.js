@@ -64,8 +64,15 @@ app.post('/', (req, res) => {
         var result = JSON.parse(data)
         var initData
 
+        var cookieData = {
+            'credential': result.Detail.accCredential,
+            'uid': result.Detail.uid
+        }
+
+        res.cookie('data', cookieData, {maxAge: 30 * 24 * 60 * 60 * 1000, signed: true})
+
         if(result.Result) {
-            initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, email: result.Detail.email}
+            initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, credential: result.Detail.accCredential}
         } else {
             initData = {loc: 'START', status: 'ERROR', reason: result.reason}
         }
