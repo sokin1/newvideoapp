@@ -14,29 +14,47 @@ export default class MainComponent extends React.Component {
             loc: this.props.state.loc,
             status: this.props.state.status,
             detail: this.props.state.detail,
-            fb_config: this.props.state.fb_config,
-            email: this.props.state.email,
-            userInfo: "Not Defined"
         }
     }
 
     componentDidMount() {
-        if(this.state.fb_config && this.state.email) {
-            firebase.initializeApp(this.state.fb_config)
+        if(this.state.detail.fb_config && this.state.detail.email) {
+            firebase.initializeApp(this.state.detail.fb_config)
 
             setTimeout(() => {
-                firebase.database().ref('users/' + md5(this.state.email)).on('value', userSnapshot => {
+                firebase.database().ref('users/' + md5(this.state.detail.email)).on('value', userSnapshot => {
                     if(userSnapshot.val().lastGroup !== '') {
-                        firebase.database().ref('groups/' + userSnapshot.val().lastGroup).on('value', groupSnapshot => {
+                        var groupRef = firebase.database().ref('groups/' + userSnapshot.val().lastGroup)
+                        groupRef.on('value', groupSnapshot => {
                             this.setState({
                                 userInfo: userSnapshot.val(),
-                                groupInfo: groupSnapshot.val()
+                                groupInfo: groupSnapshot.val(),
+                                members: groupSnapshot.val().members
+                            })
+                        })
+                        // Add myself to members
+                        var memberRef = firebase.database().ref('groups/' + userSnapshot.val().lastGroup + '/members')
+                        memberRef.push(md5(this.state.detail.email))
+
+                        // Set up onchange event for updating members
+                        memberRef.on('child_added', (data, prevChildKey) => {
+                            this.setState({
+                                members: [...members, data.val()]
+                            })
+                        })
+
+                        memberRef.on('child_removed', data => {
+                            var oldMembers = this.state.members
+                            var index = oldMembers.indexOf(data.val())
+                            oldMembers.splice(index, 1)
+                            this.setState({
+                                members: oldMembers
                             })
                         })
                     } else{
                         this.setState({
                             userInfo: userSnapshot.val(),
-                            groupInfo: "No Groups"
+                            groupInfo: undefined
                         })
                     }
                 })
@@ -48,7 +66,7 @@ export default class MainComponent extends React.Component {
         return(
             <div>
                 <Header loc={this.state.loc} userInfo={this.state.userInfo}/>
-                <Body loc={this.state.loc} userInfo={this.state.userInfo} groupInfo={this.state.groupInfo} status={this.state.status} detail={this.state.detail} />
+                <Body loc={this.state.loc} userInfo={this.state.userInfo} groupInfo={this.state.groupInfo}/>
                 <Footer />
             </div>
         )

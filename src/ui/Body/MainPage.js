@@ -5,11 +5,14 @@ export default class MainPage extends React.Component {
         super(props)
     }
 
+    componentDidMount() {
+    }
+
     render() {
         return(
             <div>
                 <h1>{JSON.stringify(this.props.userInfo)}</h1><br />
-                <h1>{JSON.stringify(this.props.groupInfo)}</h1>
+                <h1>{JSON.stringify(this.props.groupInfo)}</h1><br />
             </div>
         )
     }

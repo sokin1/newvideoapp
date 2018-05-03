@@ -4,6 +4,7 @@ export default (render_params) => {
         <html>
             <head>
                 <title>Video Chat</title>
+                <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
                 <link rel="stylesheet" type="text/css" href="/static/styles.css" />
             </head>
             <body>

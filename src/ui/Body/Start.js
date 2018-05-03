@@ -11,17 +11,13 @@ export default class Start extends React.Component {
     }
 
     render() {
-        if(this.props.loc === 'START') {
+        if(!this.props.userInfo) {
             return(
                 <TitlePage />
-            )
-        } else if(this.props.loc === 'LOGIN') {
-            return(
-                <MainPage userInfo={this.props.userInfo} groupInfo={this.props.groupInfo} />
             )
         } else {
             return(
-                <TitlePage />
+                <MainPage userInfo={this.props.userInfo} groupInfo={this.props.groupInfo} />
             )
         }
     }

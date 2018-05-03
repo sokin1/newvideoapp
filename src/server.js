@@ -18,6 +18,9 @@ import MainComponent from './ui/MainComponent'
 
 const app = express()
 
+const http = require('http').Server(app)
+var io = require('socket.io')(http)
+
 const clientDistPath = path.resolve(__dirname, '../dist')
 app.use('/static', express.static(clientDistPath))
 
@@ -61,9 +64,13 @@ app.post('/', (req, res) => {
         var initData
 
         if(result.Result) {
-            initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, email: result.Detail.email}
+            res.cookie('accCredential', result.Detail.accCredential)
+            res.cookie('expiryTime', new Date().getDate() + 30 * 24 * 3600 * 1000)
+            res.cookie('fb_config', result.Detail.fb_config)
+            res.cookie('email', result.Detail.email)
+            initData = {loc: 'MAIN', status: 'LOGIN', detail: {fb_config: result.Detail.fb_config, email: result.Detail.email}}
         } else {
-            initData = {loc: 'START', status: 'ERROR', reason: result.reason}
+            initData = {loc: 'START', status: 'ERROR', detail: result.reason}
         }
 
         renderPage(req, res, initData)
@@ -90,7 +97,7 @@ app.post('/signup', (req, res) => {
         if(result.Result) {
             initData = {loc: 'SIGNUP', status: 'SUCCESS', detail: 'Notification has been sent'}
         } else {
-            initData = {loc: 'SIGNUP', status: 'ERROR', reason: result.fail_reason}
+            initData = {loc: 'SIGNUP', status: 'ERROR', detail: result.fail_reason}
         }
 
         renderPage(req, res, initData)
@@ -99,19 +106,48 @@ app.post('/signup', (req, res) => {
 
 app.get('/', (req, res) => {
     console.log('Cookies: ', req.cookies)
-    var cur_uid = req.cookies.uid
+    var cookies = req.cookies
     var initData
 
-    if(cur_uid === undefined) {
-        initData = {loc: 'START', status: 'NA', uid: cur_uid}
+    if(cookies === undefined) {
+        // No cookie exists, go to start page
+        initData = {loc: 'START', status: 'NA', detail: 'NA'}
     } else {
-        initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
+        if(cookies.expiryTime - new Date().getDate() <= 0) {
+            // Cookie is expired, send credential to server and get cookie updated
+            var client = new net.Socket()
+            client.connect(1337, '127.0.0.1', () => {
+                const jsonData = {
+                    Action: 'LOG_IN_WITH_CREDENTIAL',
+                    Credential: cookies.accCredential
+                }
+        
+                client.write(JSON.stringify(jsonData))
+            })
+
+            client.on('data', data => {
+                var result = JSON.parse(data)
+                if(result.Result) {
+                    res.cookie('expiryTime', new Date().getDate() + 30 * 24 * 3600 * 1000)
+                    initData = {loc: 'MAIN', status: 'LOGIN', detail: {fb_config: cookies.fb_config, email: cookies.email}}
+                } else {
+                    res.clearCookie('accCredential')
+                    res.clearCookie('expiryTime')
+                    res.clearCookie('fbConfig')
+                    res.clearCookie('email')
+                    initData = {loc: 'START', status: 'ERROR', detail: result.reason}
+                }
+            })
+        } else {
+            // Cookie is not expired, don't need to talk to server
+            initData = {loc: 'MAIN', status: 'LOGIN', detail: {fb_config: cookies.fb_config, email: cookies.email}}
+        }
     }
 
     renderPage(req, res, initData)
 })
 
 var PORT = 3000
-app.listen(PORT, () => {
-    console.log('http://localhost:' + PORT)
+http.listen(PORT, () => {
+    console.log('listening on *:3000');
 })
