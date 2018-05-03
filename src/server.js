@@ -47,6 +47,10 @@ function renderPage(req, res, initData) {
     res.end(rendered_page)
 }
 
+function getAccountInfo(info) {
+    
+}
+
 app.post('/', (req, res) => {
     var client = new net.Socket()
     client.connect(1337, '127.0.0.1', () => {
@@ -63,12 +67,23 @@ app.post('/', (req, res) => {
         var result = JSON.parse(data)
         var initData
 
+        var cookieData = {
+            'credential': result.Detail.accCredential,
+            'uid': result.Detail.uid
+        }
+
+        res.cookie('data', cookieData, {maxAge: 30 * 24 * 60 * 60 * 1000, signed: true})
+
         if(result.Result) {
+<<<<<<< HEAD
             res.cookie('accCredential', result.Detail.accCredential)
             res.cookie('expiryTime', new Date().getDate() + 30 * 24 * 3600 * 1000)
             res.cookie('fb_config', result.Detail.fb_config)
             res.cookie('email', result.Detail.email)
             initData = {loc: 'MAIN', status: 'LOGIN', detail: {fb_config: result.Detail.fb_config, email: result.Detail.email}}
+=======
+            initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, credential: result.Detail.accCredential}
+>>>>>>> 77f66f21bd70f7b1e569a4465626f49e4abc26b6
         } else {
             initData = {loc: 'START', status: 'ERROR', detail: result.reason}
         }
@@ -105,6 +120,7 @@ app.post('/signup', (req, res) => {
 })
 
 app.get('/', (req, res) => {
+<<<<<<< HEAD
     console.log('Cookies: ', req.cookies)
     var cookies = req.cookies
     var initData
@@ -142,9 +158,45 @@ app.get('/', (req, res) => {
             // Cookie is not expired, don't need to talk to server
             initData = {loc: 'MAIN', status: 'LOGIN', detail: {fb_config: cookies.fb_config, email: cookies.email}}
         }
-    }
+=======
+    var cookie = req.signedCookies['login_info']
+    var decrypted_cookie = JSON.parse(Crypto.decrypt(cookie))
 
-    renderPage(req, res, initData)
+    if(decrypted_cookie.cookie_expiry - new Date().now < 0) {
+        if(decrypted_cookie.emailPassword !== 'undefined') {
+            var accountInfo = getAccountInfo(decrypted_cookie.emailPassword)
+            var client = new net.Socket()
+            client.connect(1337, '127.0.0.1', () => {
+                const jsonData = {
+                    action: 'LOG_IN',
+                    email: accountInfo.email,
+                    password: accountInfo.password
+                }
+
+                client.write(JSON.stringify(jsonData))
+            })
+
+            client.on('data', data => {
+                var result = JSON.parse(data)
+                var initData
+
+                if(result.Result) {
+                    initData = {loc: 'LOGIN', fb_config: result.Detail.fb_config, email: result.Detail.email}
+                } else {
+                    initData = {loc: 'START', status: 'ERROR', reason: result.reason}
+                }
+
+                renderPage(req, res, initData)
+            })
+        } else {
+            var initData = {loc: 'START', status: 'NA', uid: cur_uid}
+            renderPage(req, res, initData)
+        }
+    } else {
+        var initData = {loc: 'MAIN', status: 'LOGGEDIN', uid: cur_uid}
+        renderPage(req, res, initData)
+>>>>>>> 77f66f21bd70f7b1e569a4465626f49e4abc26b6
+    }
 })
 
 var PORT = 3000
